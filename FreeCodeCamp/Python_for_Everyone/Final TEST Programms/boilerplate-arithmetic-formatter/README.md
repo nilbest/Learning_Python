@@ -31,6 +31,7 @@ Output:
 +  8    - 3801    + 9999    -  49
 ----    ------    ------    -----
   40     -3800     19998      474
+
 Rules
 The function will return the correct conversion if the supplied problems are properly formatted, otherwise, it will return a string that describes an error that is meaningful to the user.
 
