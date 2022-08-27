@@ -6,5 +6,9 @@ from unittest import main
 print(add_time("11:06 PM", "2:02"))
 print(add_time("11:06 PM", "0:56"))
 
+print(add_time("11:59 PM", "24:05", "Wednesday"))
+
+print(add_time("2:59 AM", "24:00"))
+      
 # Run unit tests automatically
-#main(module='test_module', exit=False)
+main(module='test_module', exit=False)
