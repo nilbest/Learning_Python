@@ -46,13 +46,21 @@ def add_time(start, duration, Day=None):
     add_Day = int(math.trunc(final_hour / 24))
  
     if add_Day > 0:
-        print((final_hour / 24)-int(math.trunc(final_hour / 24)))
+        #print("Test"+str((final_hour / 24)-int(math.trunc(final_hour / 24))))
         Test=(final_hour / 24)-int(math.trunc(final_hour / 24))
         final_hour = round(Test*24)
     
-    if final_hour > 12:
-        final_hour = final_hour - 12
+    if final_hour >= 12:
+        #print("Test"+str(final_hour))
+        if final_hour > 12:
+            final_hour = final_hour - 12
+        else:
+            final_hour = final_hour
+        #print(final_hour)
         new_time_name = "PM"
+    
+    if final_hour < 1:
+        final_hour = 12
         
     
     
@@ -62,7 +70,9 @@ def add_time(start, duration, Day=None):
         searche_Days={"Monday":1,"Tuesday":2,"Wednesday":3,"Thursday":4,"Friday":5,"Saturday":6,"Sunday":7}
         calculate_Day = ((add_Day/7)-int(math.trunc(add_Day/7)))*7
         new_Day = searche_Days[new_Day]
-        new_Day = Days[new_Day+calculate_Day] if new_Day+calculate_Day < 7 else Days[new_Day+calculate_Day-7]
+        new_Day = Days[int(new_Day+calculate_Day)]  if int(new_Day+calculate_Day) <= 7 else Days[int(new_Day+calculate_Day-7)]
+        
+            
         
         
     if final_min < 10:
