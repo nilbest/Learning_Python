@@ -52,6 +52,7 @@ print(sq.get_picture())
 rect.set_height(8)
 rect.set_width(16)
 print(rect.get_amount_inside(sq))
+
 That code should return:
 
 50
