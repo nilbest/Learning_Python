@@ -52,7 +52,7 @@ What is the minimum number of hours a person works per week?
 - Done
 
 What percentage of the people who work the minimum number of hours per week have a salary of more than 50K?
-
+- Done
 
 What country has the highest percentage of people that earn >50K and what is that percentage?
 Identify the most popular occupation for those who earn >50K in India.
