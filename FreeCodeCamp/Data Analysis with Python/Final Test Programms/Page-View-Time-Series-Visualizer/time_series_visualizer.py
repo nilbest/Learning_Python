@@ -33,40 +33,74 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = df
-    df_bar['year'] = pd.DatetimeIndex(df.index).year
-    df_bar['month'] = pd.DatetimeIndex(df.index).month
-    #df_bar['monthly_value']=df_bar['year','month'].unique().sum()
-    #df_bar['monthly_value']= df_bar.loc[pd.DatetimeIndex(df.index).month].sum()
-    years = df_bar['year'].unique().tolist()
-    months = df_bar['month'].unique().tolist()
-    #print(df_bar['year'].unique())
-    #print(years)
-    #print(df_bar)
-    #print(years)
-    #print(months)
-    df_bar['m_value'] = np.nan 
+    
+    df_bar = df.groupby([pd.to_datetime(df.index).year,pd.to_datetime(df.index).month]).agg({'value': np.sum})
+    df_bar.index = df_bar.index.rename(['Year','Month'])
+    
+    #First try's
+    #df_bar = df
+    #df_bar['year'] = pd.DatetimeIndex(df.index).year
+    #df_bar['month'] = pd.DatetimeIndex(df.index).month
+    #years = df_bar['year'].unique().tolist()
+    #months = df_bar['month'].unique().tolist()
     
     #sum_list = []
-    for year in years:
-        for month in months:
-            #df.loc[df['team'] == 'A', 'points'].sum()
+    #for year in years:
+    #    for month in months:
             #print(df[(df_bar['year']==year)&(df_bar['month']==month)]['value'])
             #print((df_bar['year'].isin([year])) & (df_bar['month'].isin([month])))
-            
-            #print(df_bar[(df_bar['year'].isin([year])) & (df_bar['month'].isin([month]))]['value'].sum())
-            sum = df_bar[(df_bar['year'].isin([year])) & (df_bar['month'].isin([month]))]['value'].sum()
-            #sum_list.append(sum)
-            #print(df_bar.groupby((df_bar['year'].isin([year])) & (df_bar['month'].isin([month]))).sum())
-            #df_bar['m_value'] = df_bar.groupby((df_bar['year'].isin([year])) & (df_bar['month'].isin([month]))).sum()
-            #df_bar['m_value'] = df_bar.loc[(df_bar['year']==year) & (df_bar['month']==month),'value'].sum()
-            #pass
+            #Problem not able to locate the right values to every year and month
     #print(sum_list)        
-    df_bar['m_value'] = sum_list
-    print(df_bar)
+    #df_bar['m_value'] = sum_list
     
     # Draw bar plot
-    fig = None
+    #print(df_bar)
+    #print(df_bar['value'].tolist())
+    #print(df_bar.index)
+    
+    print(df_bar)
+    #print(df_bar.index.Month)
+    
+    
+    
+    #set width of bar
+    barWidth = 0.25
+    fig = plt.subplots(figsize =(12, 8))
+    
+    # set height of bar
+    #January = df_bar[df_bar['date']==1].tolist()
+    #print(df_bar.iloc[df_bar.index.get_level_values('Month') == 1])
+    print(df_bar.index.get_level_values('Month').unique().tolist())
+    month_list = df_bar.index.get_level_values('Month').unique().tolist()
+    month_list.sort()
+    
+    print(month_list)
+    print(df_bar.iloc[df_bar.index.get_level_values('Month') == 1]['value'].tolist())
+    #print(January)
+    #February = 
+    #ECE = [28, 6, 16, 5, 10]
+    #CSE = [29, 3, 24, 25, 17]
+    #
+    # Set position of bar on X axis
+    #br1 = np.arange(len(IT))
+    #br2 = [x + barWidth for x in br1]
+    #br3 = [x + barWidth for x in br2]
+    #
+    ## Make the plot
+    #plt.bar(br1, IT, color ='r', width = barWidth,
+    #        edgecolor ='grey', label ='IT')
+    #plt.bar(br2, ECE, color ='g', width = barWidth,
+    #        edgecolor ='grey', label ='ECE')
+    #plt.bar(br3, CSE, color ='b', width = barWidth,
+    #        edgecolor ='grey', label ='CSE')
+    #
+    ## Adding Xticks
+    #plt.xlabel('Branch', fontweight ='bold', fontsize = 15)
+    #plt.ylabel('Students passed', fontweight ='bold', fontsize = 15)
+    #plt.xticks([r + barWidth for r in range(len(IT))],
+    #        ['2015', '2016', '2017', '2018', '2019'])
+    #
+    #plt.legend()
 
 
 
