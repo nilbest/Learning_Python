@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
+#from matplotlib.ticker import ScalarFormatter
 import pandas as pd
 import numpy as np
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
+import datetime
 register_matplotlib_converters()
+
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
 df = pd.read_csv('.\\Final Test Programms\\Page-View-Time-Series-Visualizer\\fcc-forum-pageviews.csv')
@@ -37,73 +40,41 @@ def draw_bar_plot():
     df_bar = df.groupby([pd.to_datetime(df.index).year,pd.to_datetime(df.index).month]).agg({'value': np.sum})
     df_bar.index = df_bar.index.rename(['Year','Month'])
     
-    #First try's
-    #df_bar = df
-    #df_bar['year'] = pd.DatetimeIndex(df.index).year
-    #df_bar['month'] = pd.DatetimeIndex(df.index).month
-    #years = df_bar['year'].unique().tolist()
-    #months = df_bar['month'].unique().tolist()
-    
-    #sum_list = []
-    #for year in years:
-    #    for month in months:
-            #print(df[(df_bar['year']==year)&(df_bar['month']==month)]['value'])
-            #print((df_bar['year'].isin([year])) & (df_bar['month'].isin([month])))
-            #Problem not able to locate the right values to every year and month
-    #print(sum_list)        
-    #df_bar['m_value'] = sum_list
-    
-    # Draw bar plot
-    #print(df_bar)
-    #print(df_bar['value'].tolist())
-    #print(df_bar.index)
-    
-    print(df_bar)
-    #print(df_bar.index.Month)
     
     
     
     #set width of bar
     barWidth = 0.25
-    fig = plt.subplots(figsize =(12, 8))
+
     
-    # set height of bar
-    #January = df_bar[df_bar['date']==1].tolist()
-    #print(df_bar.iloc[df_bar.index.get_level_values('Month') == 1])
-    print(df_bar.index.get_level_values('Month').unique().tolist())
-    month_list = df_bar.index.get_level_values('Month').unique().tolist()
-    month_list.sort()
+
+
+
+    df_bar=pd.pivot_table(data=df_bar, index='Year', columns='Month', values='value')
+    #print(df_bar)   
+        
+        
+        
+    fig, ax = plt.subplots(figsize=(16,9))
+    plt.rcParams['axes.formatter.useoffset'] = False
+    #y_formatter = ScalarFormatter(useOffset=False)
+    #ax.yaxis.set_major_formatter(y_formatter)
     
-    print(month_list)
-    print(df_bar.iloc[df_bar.index.get_level_values('Month') == 1]['value'].tolist())
-    #print(January)
-    #February = 
-    #ECE = [28, 6, 16, 5, 10]
-    #CSE = [29, 3, 24, 25, 17]
-    #
-    # Set position of bar on X axis
-    #br1 = np.arange(len(IT))
-    #br2 = [x + barWidth for x in br1]
-    #br3 = [x + barWidth for x in br2]
-    #
-    ## Make the plot
-    #plt.bar(br1, IT, color ='r', width = barWidth,
-    #        edgecolor ='grey', label ='IT')
-    #plt.bar(br2, ECE, color ='g', width = barWidth,
-    #        edgecolor ='grey', label ='ECE')
-    #plt.bar(br3, CSE, color ='b', width = barWidth,
-    #        edgecolor ='grey', label ='CSE')
-    #
-    ## Adding Xticks
-    #plt.xlabel('Branch', fontweight ='bold', fontsize = 15)
-    #plt.ylabel('Students passed', fontweight ='bold', fontsize = 15)
-    #plt.xticks([r + barWidth for r in range(len(IT))],
-    #        ['2015', '2016', '2017', '2018', '2019'])
-    #
-    #plt.legend()
-
-
-
+    #plt.yticks(np.arange(0, df_bar.all().max(), 20000))
+    df_bar.plot(ax = ax, kind='bar')
+    
+    ax.set_xlabel('Years')
+    ax.set_ylabel('Average Page Views')
+    handles, labels = ax.get_legend_handles_labels()
+    new_labels = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December']
+    
+    # after plotting the data, format the labels
+    #current_values = plt.gca().get_yticks()
+    # using format string '{:.0f}' here but you can choose others
+    #plt.gca().set_yticklabels(['{:.0f}'.format(x) for x in current_values])
+    
+    ax.legend(handles = handles, labels = new_labels, loc = 'upper left', bbox_to_anchor = (1, 1.02))
 
     # Save image and return fig (don't change this part)
     fig.savefig('.\\Final Test Programms\\Page-View-Time-Series-Visualizer\\bar_plot.png')
@@ -115,11 +86,19 @@ def draw_box_plot():
     df_box.reset_index(inplace=True)
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
-
-    # Draw box plots (using Seaborn)
-    fig = None
-
-
+    df_box.sort_values(by=['year','date'],ascending=[False,True],inplace=True)
+    
+    # Draw box plots (using Seaborn)   
+    fig,ax = plt.subplots(1,2, figsize=(16, 9))
+    sns.boxplot(x='year',y='value', data=df_box,ax=ax[0])
+    ax[0].set_title("Year-wise Box Plot (Trend)")
+    ax[0].set_xlabel("Year")
+    ax[0].set_ylabel("Page Views")
+     
+    sns.boxplot(x='month',y='value',data=df_box,ax=ax[1]) 
+    ax[1].set_title("Month-wise Box Plot (Seasonality)")
+    ax[1].set_xlabel("Month")
+    ax[1].set_ylabel("Page Views")
 
 
     # Save image and return fig (don't change this part)
