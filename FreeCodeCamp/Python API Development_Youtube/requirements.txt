@@ -1,0 +1,3 @@
+######### Main Library's ########
+fastapi[all]
+
